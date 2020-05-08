@@ -21,7 +21,7 @@ class Search extends React.Component {
         }))
       }
     }).catch(err => {
-      console.err(err)
+      console.log(err)
     });
   };
   render() {
