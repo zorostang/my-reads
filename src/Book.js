@@ -3,19 +3,35 @@ import BookShelfChanger from './BookShelfChanger'
 
 const Book = props => {
   if (!props) return "loading..."
-  return (
-    <li>
-    <div className="book">
-      <div className="book-top">
+  function BookCover(props) {
+    if (props.imageLinks && props.imageLinks.smallThumbnail) {
+      return (
         <div
           className="book-cover"
           style={{
             width: 128,
             height: 193,
             backgroundImage:
-              `url("${props.book.imageLinks.smallThumbnail}")`,
+              `url("${props.imageLinks.smallThumbnail}")`,
           }}
         ></div>
+      )
+    }
+    return (
+      <div
+        className="book-cover"
+        style={{
+          width: 128,
+          height: 193,
+        }}
+      ></div>
+    ) 
+  }
+  return (
+    <li>
+    <div className="book">
+      <div className="book-top">
+        <BookCover imageLinks={props.book.imageLinks} />
         <BookShelfChanger book={props.book} methods={props.methods}/>
       </div>
         <div className="book-title">{props.book.title}</div>
