@@ -2,8 +2,6 @@ import React from 'react'
 import { update } from './BooksAPI'
 const BookShelfChanger = props => {
   const handleChange = e => {
-    console.log(e.target.value);
-    console.log(props);
     update(props.book, e.target.value).then(() => props.methods.getAll())
   }
   return (
