@@ -7,15 +7,6 @@ import { Link, Route } from "react-router-dom";
 import Search from "./Search";
 class BooksApp extends React.Component {
   state = {
-    /**
-     * TODO: Instead of using this state variable to keep track of which page
-     * we're on, use the URL in the browser's address bar. This will ensure that
-     * users can use the browser's back and forward buttons to navigate between
-     * pages, as well as provide a good URL they can bookmark and share.
-     */
-    showSearchPage: false,
-    // There's no needs for books to manage their own state. Everything can be managed at the application level
-    // This means all other components can be functional components only
     currentlyReading: [],
     wantToRead: [],
     read: [],
@@ -23,12 +14,9 @@ class BooksApp extends React.Component {
   };
   async getAll() {
     const books = await getAll();
-    console.log(books);
     this.setState((state) => ({
       ...state,
-      currentlyReading: books.filter(
-        (book) => book.shelf === "currentlyReading"
-      ),
+      currentlyReading: books.filter((book) => book.shelf === "currentlyReading"),
       wantToRead: books.filter((book) => book.shelf === "wantToRead"),
       read: books.filter((book) => book.shelf === "read"),
       none: books.filter((book) => book.shelf === "none"),
@@ -37,10 +25,14 @@ class BooksApp extends React.Component {
   componentDidMount() {
     this.getAll();
   }
+
+  allBooks() {
+    return [...this.state.currentlyReading, ...this.state.wantToRead, ...this.state.read ]
+  }
   render() {
     return (
       <div className="app">
-        <Route path="/search" render={(props) => <Search {...props} methods={{ getAll: this.getAll.bind(this) }} />} />
+        <Route path="/search" render={(props) => <Search {...props} methods={{ getAll: this.getAll.bind(this) }} bookShelf={this.allBooks()} />} />
         <Route
           exact
           path="/"

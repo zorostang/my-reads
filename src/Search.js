@@ -2,11 +2,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Book from "./Book";
 import { search } from "./BooksAPI";
-
 class Search extends React.Component {
   state = {
     books: [],
+    bookShelf: this.props.bookShelf,
   };
+  
   handleChange = (e) => {
     search(e.target.value).then((res) => {
       if (res) {
@@ -24,6 +25,18 @@ class Search extends React.Component {
       console.log(err)
     });
   };
+  
+  // returns array of books, replaces search results book with book from bookshelf, if match exists
+  combine = () =>
+    this.state.books.map(book => {
+      // if discovered book is in bookshelf then replace with bookShelf book
+      for (let myBook of this.state.bookShelf) {
+        if (book.id === myBook.id) {
+          return myBook
+        }
+      }
+      return book
+    })
   render() {
     return (
       <div className="search-books">
@@ -41,7 +54,7 @@ class Search extends React.Component {
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {(this.state.books.length > 0) && this.state.books.map((book, i) => (
+            {(this.combine().length > 0) && this.combine().map((book, i) => (
               <Book key={i} book={book} methods={this.props.methods} />
             ))}
           </ol>
